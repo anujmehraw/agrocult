@@ -1,59 +1,35 @@
 import { NextResponse } from "next/server";
-import OpenAI from "openai";
-
-const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY,
-});
 
 export async function POST(req) {
   try {
     const formData = await req.formData();
     const file = formData.get("file");
 
-    if (!file) {
-      return NextResponse.json({ error: "No file" });
-    }
-
+    // convert file to base64
     const bytes = await file.arrayBuffer();
     const base64 = Buffer.from(bytes).toString("base64");
 
-    const response = await openai.chat.completions.create({
-      model: "gpt-4o-mini",
-      messages: [
-        {
-          role: "system",
-          content:
-            "You are an agricultural expert. Analyze plant images and give disease, risk level, and advice.",
+    const response = await fetch(
+      "https://plant.id/api/v3/health_assessment",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Api-Key": process.env.NEXT_PUBLIC_CROP_API_KEY,
         },
-        {
-          role: "user",
-          content: [
-            { type: "text", text: "Analyze this crop image." },
-            {
-              type: "image_url",
-              image_url: {
-                url: `data:image/jpeg;base64,${base64}`,
-              },
-            },
-          ],
-        },
-      ],
-    });
+        body: JSON.stringify({
+          images: [base64],
+          latitude: 23.2599,
+          longitude: 77.4126,
+          similar_images: true,
+        }),
+      }
+    );
 
-    const reply = response.choices[0].message.content;
+    const data = await response.json();
 
-    return NextResponse.json({
-      disease: reply,
-      confidence: 0.9,
-      risk: "AI Generated",
-      irrigation: "Follow AI advice",
-    });
-
+    return NextResponse.json(data);
   } catch (err) {
-    console.error(err);
-
-    return NextResponse.json({
-      error: "Analysis failed",
-    });
+    return NextResponse.json({ error: "Prediction failed" });
   }
 }

@@ -12,7 +12,7 @@ export default function Chatbot() {
     const userMessage = msg;
     setMsg("");
 
-    // ✅ Add user message ONCE
+    // ✅ Add user message
     setChat((prev) => [...prev, { role: "user", text: userMessage }]);
     setLoading(true);
 
@@ -20,20 +20,20 @@ export default function Chatbot() {
       const res = await fetch("/api/chat", {
         method: "POST",
         headers: {
-          "Content-Type": "application/json", // ✅ FIXED
+          "Content-Type": "application/json",
         },
         body: JSON.stringify({ message: userMessage }),
       });
 
       const data = await res.json();
 
-      // ✅ Only bot reply added here
+      // ✅ Add bot response
       setChat((prev) => [
         ...prev,
         { role: "bot", text: data.reply },
       ]);
 
-    } catch (err) {
+    } catch {
       setChat((prev) => [
         ...prev,
         { role: "bot", text: "Error. Try again." },
@@ -44,22 +44,22 @@ export default function Chatbot() {
   };
 
   return (
-    <div className="bg-white p-6 rounded-2xl shadow-lg max-w-md mx-auto">
-
-      <h2 className="font-semibold mb-4 text-green-700">
+    <div className="mx-auto w-full max-w-3xl rounded-2xl border border-emerald-100 bg-amber-50 p-5 shadow">
+      <h2 className="mb-1 text-xl font-bold text-amber-950">
         💬 Smart Farming Chat
       </h2>
+      <p className="mb-4 text-sm text-amber-700">
+        Ask questions on crop health, irrigation, and farming practices.
+      </p>
 
-      {/* CHAT */}
-      <div className="h-64 overflow-y-auto space-y-3 mb-3">
-
+      <div className="mb-3 h-72 space-y-3 overflow-y-auto rounded-xl border border-amber-100 bg-white p-3">
         {chat.map((c, i) => (
           <div key={i}>
             <div
-              className={`p-2 rounded-lg max-w-[80%] ${
+              className={`max-w-[85%] rounded-xl p-3 text-sm leading-relaxed shadow-sm ${
                 c.role === "user"
-                  ? "ml-auto bg-green-100 text-right"
-                  : "bg-gray-100"
+                  ? "ml-auto bg-emerald-600 text-right text-white"
+                  : "bg-lime-50 text-amber-900"
               }`}
             >
               {c.text}
@@ -68,25 +68,26 @@ export default function Chatbot() {
         ))}
 
         {loading && (
-          <p className="text-sm text-gray-500">AI is typing...</p>
+          <p className="text-sm italic text-amber-700">
+            AI is typing...
+          </p>
         )}
-
       </div>
 
-      {/* INPUT */}
-      <input
-        value={msg}
-        onChange={(e) => setMsg(e.target.value)}
-        className="border p-2 w-full rounded"
-        placeholder="Ask about crops, irrigation..."
-      />
-
-      <button
-        onClick={send}
-        className="mt-3 bg-green-600 text-white w-full p-2 rounded hover:bg-green-700"
-      >
-        Send
-      </button>
+      <div className="flex gap-2">
+        <input
+          value={msg}
+          onChange={(e) => setMsg(e.target.value)}
+          className="w-full rounded-xl border border-amber-200 bg-white px-4 py-3 text-amber-950 outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-100"
+          placeholder="Ask about crops, irrigation..."
+        />
+        <button
+          onClick={send}
+          className="rounded-xl bg-gradient-to-r from-emerald-600 to-lime-600 px-5 py-3 font-semibold text-white shadow transition active:scale-[0.99]"
+        >
+          Send
+        </button>
+      </div>
 
     </div>
   );
