@@ -1,12 +1,36 @@
 "use client";
 import { useState, useRef, useEffect } from "react";
+import { useTranslation } from "../lib/useTranslation";
 
 export default function Chatbot() {
+  const { t } = useTranslation();
   const [chat, setChat] = useState<any[]>([]);
   const [input, setInput] = useState("");
   const [listening, setListening] = useState(false);
   const [voices, setVoices] = useState<any[]>([]);
   const [lang, setLang] = useState("en-IN");
+  const [appLanguage, setAppLanguage] = useState("English");
+
+  const LANG_MAP: Record<string, string> = {
+    "English": "en-IN",
+    "Hindi": "hi-IN",
+    "Tamil": "ta-IN",
+    "Telugu": "te-IN",
+    "Kannada": "kn-IN",
+    "Marathi": "mr-IN",
+    "Gujarati": "gu-IN",
+    "Punjabi": "pa-IN",
+  };
+
+  useEffect(() => {
+    const savedLang = localStorage.getItem("appLanguage");
+    if (savedLang) {
+      setAppLanguage(savedLang);
+      if (LANG_MAP[savedLang]) {
+        setLang(LANG_MAP[savedLang]);
+      }
+    }
+  }, []);
 
   const recognitionRef = useRef<any>(null);
 
@@ -44,7 +68,7 @@ export default function Chatbot() {
       console.log("VOICE:", text);
 
       setListening(false);
-      handleSend(text);
+      handleSend(text, true);
     };
 
     recognition.onerror = (e: any) => {
@@ -78,7 +102,7 @@ export default function Chatbot() {
   };
 
   // 🤖 SEND MESSAGE (TEXT + VOICE)
-  const handleSend = async (msg?: string) => {
+  const handleSend = async (msg?: string, isVoice: boolean = false) => {
     const userMsg = msg || input;
     if (!userMsg) return;
 
@@ -87,12 +111,18 @@ export default function Chatbot() {
     setChat((prev) => [...prev, { role: "user", text: userMsg }]);
 
     try {
+      const messages = [
+        { role: "system", content: `You are a helpful agricultural AI assistant. You MUST respond strictly in ${appLanguage}. If the user speaks in a certain language, reply in that same language.` },
+        ...chat.map(m => ({ role: m.role === "bot" ? "assistant" : "user", content: m.text })),
+        { role: "user", content: userMsg }
+      ];
+
       const res = await fetch("/api/chat", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ message: userMsg }),
+        body: JSON.stringify({ messages }),
       });
 
       const data = await res.json();
@@ -104,7 +134,7 @@ export default function Chatbot() {
         { role: "bot", text: reply },
       ]);
 
-      speak(reply);
+      if (isVoice) speak(reply);
 
     } catch {
       const fallback = "AI is not available right now";
@@ -114,7 +144,7 @@ export default function Chatbot() {
         { role: "bot", text: fallback },
       ]);
 
-      speak(fallback);
+      if (isVoice) speak(fallback);
     }
   };
 
@@ -142,49 +172,28 @@ export default function Chatbot() {
         <input
           value={input}
           onChange={(e) => setInput(e.target.value)}
-          placeholder="Ask something..."
+          placeholder={t("Ask something...")}
           className="flex-1 border p-2 rounded"
         />
 
         {/* 🎤 MIC */}
         <button
           onClick={startListening}
-          className={`px-3 rounded text-white ${
-            listening ? "bg-red-500" : "bg-green-600"
+          className={`flex items-center justify-center w-10 rounded text-white ${
+            listening ? "bg-red-500" : "bg-green-600 hover:bg-green-700"
           }`}
+          title="Voice Input"
         >
-          🎤
+          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z"></path></svg>
         </button>
 
         {/* SEND */}
         <button
           onClick={() => handleSend()}
-          className="bg-green-700 text-white px-3 rounded"
+          className="bg-green-700 hover:bg-green-800 text-white px-4 rounded font-medium transition"
         >
-          Send
+          {t("Send")}
         </button>
-      </div>
-
-      {/* 🌍 LANGUAGE SELECT */}
-      <div className="text-sm">
-        <label className="mr-2">Voice Language:</label>
-
-        <select
-          value={lang}
-          onChange={(e) => setLang(e.target.value)}
-          className="border p-1 rounded"
-        >
-          <option value="en-IN">🇮🇳 English (India)</option>
-          <option value="hi-IN">🇮🇳 Hindi</option>
-          <option value="ta-IN">🇮🇳 Tamil</option>
-          <option value="te-IN">🇮🇳 Telugu</option>
-          <option value="mr-IN">🇮🇳 Marathi</option>
-          <option value="bn-IN">🇮🇳 Bengali</option>
-          <option value="gu-IN">🇮🇳 Gujarati</option>
-          <option value="kn-IN">🇮🇳 Kannada</option>
-          <option value="ml-IN">🇮🇳 Malayalam</option>
-          <option value="pa-IN">🇮🇳 Punjabi</option>
-        </select>
       </div>
 
     </div>
