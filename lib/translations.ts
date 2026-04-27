@@ -89,7 +89,22 @@ export const translations: Record<string, Record<string, string>> = {
     "Saved! Reloading...": "Saved! Reloading...",
     "Danger Zone": "Danger Zone",
     "Clear Local Data & Sign Out": "Clear Local Data & Sign Out",
-    "This will erase your saved language and sign you out.": "This will erase your saved language and sign you out."
+    "This will erase your saved language and sign you out.": "This will erase your saved language and sign you out.",
+
+    // Advanced Settings
+    "Farm Location": "Farm Location",
+    "City / Region": "City / Region",
+    "Enter your city (e.g. Pune)": "Enter your city (e.g. Pune)",
+    "Used to fetch local weather and satellite data.": "Used to fetch local weather and satellite data.",
+    "Farm Details": "Farm Details",
+    "Farm Size (Acres)": "Farm Size (Acres)",
+    "Primary Crop": "Primary Crop",
+    "e.g., Wheat, Cotton": "e.g., Wheat, Cotton",
+    "Notification Preferences": "Notification Preferences",
+    "Weather Alerts": "Weather Alerts",
+    "Mandi Price Updates": "Mandi Price Updates",
+    "AI Health Reminders": "AI Health Reminders",
+    "Real-time insights for your fields in": "Real-time insights for your fields in"
   },
   
   Hindi: {
@@ -182,6 +197,21 @@ export const translations: Record<string, Record<string, string>> = {
     "Saved! Reloading...": "सहेजा गया! पृष्ठ पुनः लोड हो रहा है...",
     "Danger Zone": "खतरे का क्षेत्र",
     "Clear Local Data & Sign Out": "स्थानीय डेटा साफ़ करें और साइन आउट करें",
-    "This will erase your saved language and sign you out.": "यह आपकी सहेजी गई भाषा को मिटा देगा और आपको साइन आउट कर देगा।"
+    "This will erase your saved language and sign you out.": "यह आपकी सहेजी गई भाषा को मिटा देगा और आपको साइन आउट कर देगा।",
+
+    // Advanced Settings
+    "Farm Location": "खेत का स्थान",
+    "City / Region": "शहर / क्षेत्र",
+    "Enter your city (e.g. Pune)": "अपना शहर दर्ज करें (जैसे पुणे)",
+    "Used to fetch local weather and satellite data.": "स्थानीय मौसम और सैटेलाइट डेटा लाने के लिए उपयोग किया जाता है।",
+    "Farm Details": "खेत का विवरण",
+    "Farm Size (Acres)": "खेत का आकार (एकड़)",
+    "Primary Crop": "प्राथमिक फसल",
+    "e.g., Wheat, Cotton": "उदा., गेहूं, कपास",
+    "Notification Preferences": "अधिसूचना प्राथमिकताएं",
+    "Weather Alerts": "मौसम अलर्ट",
+    "Mandi Price Updates": "मंडी भाव अपडेट",
+    "AI Health Reminders": "एआई स्वास्थ्य अनुस्मारक",
+    "Real-time insights for your fields in": "आपके खेतों के लिए वास्तविक समय की जानकारी:"
   }
 };

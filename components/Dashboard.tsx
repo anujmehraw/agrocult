@@ -18,16 +18,18 @@ export default function Dashboard() {
   const [data, setData] = useState<any[]>([]);
   const [current, setCurrent] = useState<any>(null);
   const [error, setError] = useState("");
-
-  const lat = 23.2599; // Bhopal, India
-  const lon = 77.4126;
+  const [city, setCity] = useState("Bhopal");
+  const [coords, setCoords] = useState({ lat: 23.2599, lon: 77.4126 }); // Default Bhopal
 
   // 🌤 FETCH WEATHER
   useEffect(() => {
     const fetchWeather = async () => {
+      const savedCity = localStorage.getItem("userCity") || "Bhopal";
+      setCity(savedCity);
+
       try {
         const weatherRes = await fetch(
-          `https://api.openweathermap.org/data/2.5/forecast?q=Bhopal&units=metric&appid=${process.env.NEXT_PUBLIC_WEATHER_API_KEY}`
+          `https://api.openweathermap.org/data/2.5/forecast?q=${savedCity}&units=metric&appid=${process.env.NEXT_PUBLIC_WEATHER_API_KEY}`
         );
         const weatherJson = await weatherRes.json();
 
@@ -36,11 +38,19 @@ export default function Dashboard() {
           return;
         }
 
-        const chartData = weatherJson.list.slice(0, 8).map((item: any) => ({
-          time: item.dt_txt.split(" ")[1].slice(0, 5),
-          temp: item.main.temp,
-          humidity: item.main.humidity,
-        }));
+        // Update map coordinates dynamically based on weather response
+        if (weatherJson.city && weatherJson.city.coord) {
+          setCoords({ lat: weatherJson.city.coord.lat, lon: weatherJson.city.coord.lon });
+        }
+
+        const chartData = weatherJson.list.slice(0, 8).map((item: any) => {
+          const date = new Date(item.dt * 1000);
+          return {
+            time: date.toLocaleTimeString('en-US', { hour: 'numeric', hour12: true }),
+            temp: item.main.temp,
+            humidity: item.main.humidity,
+          };
+        });
 
         setData(chartData);
         setCurrent(weatherJson.list[0]);
@@ -71,7 +81,7 @@ export default function Dashboard() {
       <div className="flex justify-between items-end">
         <div>
           <h2 className="text-3xl font-extrabold text-green-900 tracking-tight">{t("Farm Overview")}</h2>
-          <p className="text-gray-600 mt-1">{t("Real-time insights for your fields in Bhopal, MP.")}</p>
+          <p className="text-gray-600 mt-1">{t("Real-time insights for your fields in")} {city}.</p>
         </div>
       </div>
 
@@ -153,8 +163,11 @@ export default function Dashboard() {
                     </linearGradient>
                   </defs>
                   <XAxis dataKey="time" axisLine={false} tickLine={false} tick={{fill: '#6b7280', fontSize: 12}} dy={10} />
-                  <YAxis axisLine={false} tickLine={false} tick={{fill: '#6b7280', fontSize: 12}} />
-                  <Tooltip contentStyle={{ borderRadius: '12px', border: 'none', boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)' }} />
+                  <YAxis axisLine={false} tickLine={false} tick={{fill: '#6b7280', fontSize: 12}} tickFormatter={(val) => `${val}°C`} />
+                  <Tooltip 
+                    contentStyle={{ borderRadius: '12px', border: 'none', boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)' }} 
+                    formatter={(value: any) => [`${value}°C`, "Temperature"]}
+                  />
                   <Area type="monotone" dataKey="temp" stroke="#16a34a" strokeWidth={3} fillOpacity={1} fill="url(#colorTemp)" />
                 </AreaChart>
               </ResponsiveContainer>
@@ -167,7 +180,7 @@ export default function Dashboard() {
           <h3 className="text-lg font-bold text-gray-800 mb-4">{t("Farm Satellite View")}</h3>
           <div className="flex-1 min-h-[250px] rounded-xl overflow-hidden border border-gray-200 shadow-inner">
             <iframe
-              src={`https://maps.google.com/maps?q=${lat},${lon}&t=k&z=15&output=embed`}
+              src={`https://maps.google.com/maps?q=${coords.lat},${coords.lon}&t=k&z=15&output=embed`}
               className="w-full h-full border-0"
               loading="lazy"
             />

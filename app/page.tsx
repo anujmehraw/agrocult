@@ -89,7 +89,7 @@ export default function Home() {
               }`}
             >
               <span>{item.icon}</span>
-              {item.label}
+              {t(item.label)}
             </button>
           ))}
         </nav>
@@ -110,31 +110,49 @@ export default function Home() {
           <h1 className="text-xl font-bold text-green-800">Agrocult</h1>
         </div>
         <button 
-          onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-          className="text-2xl"
+          onClick={() => setIsMobileMenuOpen(true)}
+          className="text-3xl text-gray-800 focus:outline-none"
         >
-          {isMobileMenuOpen ? "✖" : "☰"}
+          ☰
         </button>
       </div>
 
-      {/* 📱 MOBILE MENU */}
-      {isMobileMenuOpen && (
-        <div className="md:hidden fixed top-[60px] w-full glass z-40 flex flex-col p-4 shadow-lg border-b">
-          {navItems.map((item) => (
-            <button
-              key={item.id}
-              onClick={() => { setActive(item.id); setIsMobileMenuOpen(false); }}
-              className={`flex items-center gap-3 px-4 py-3 rounded-lg mb-2 font-medium ${
-                active === item.id ? "bg-green-600 text-white" : "bg-white/50 text-gray-800"
-              }`}
-            >
-              <span>{item.icon}</span>
-              {item.label}
-            </button>
-          ))}
-          <button onClick={logout} className="mt-2 text-red-600 font-medium py-2">{t("Logout")}</button>
+      {/* 📱 MOBILE SLIDE-OUT MENU */}
+      <div className={`md:hidden fixed inset-0 z-[100] transition-transform duration-300 ${isMobileMenuOpen ? "translate-x-0" : "-translate-x-full"}`}>
+        {/* Backdrop */}
+        <div className="absolute inset-0 bg-black/50 backdrop-blur-sm" onClick={() => setIsMobileMenuOpen(false)}></div>
+        
+        {/* Menu Panel */}
+        <div className="absolute left-0 top-0 bottom-0 w-72 bg-green-900 text-white shadow-2xl p-6 flex flex-col">
+          <div className="flex justify-between items-center mb-10">
+            <h2 className="text-2xl font-extrabold flex items-center gap-2">
+              <svg className="w-6 h-6 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"></path></svg>
+              Agrocult
+            </h2>
+            <button onClick={() => setIsMobileMenuOpen(false)} className="text-white text-xl hover:text-green-300">✖</button>
+          </div>
+          
+          <nav className="flex flex-col space-y-3 flex-1">
+            {navItems.map((item) => (
+              <button
+                key={item.id}
+                onClick={() => { setActive(item.id); setIsMobileMenuOpen(false); }}
+                className={`flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-300 font-medium ${
+                  active === item.id ? "bg-white text-green-900 shadow-md scale-105" : "hover:bg-white/10 text-green-50"
+                }`}
+              >
+                <span>{item.icon}</span>
+                {t(item.label)}
+              </button>
+            ))}
+          </nav>
+          
+          <button onClick={logout} className="mt-auto w-full flex items-center justify-center gap-2 bg-red-500/20 hover:bg-red-500 hover:text-white text-red-100 py-3 rounded-xl transition font-medium border border-red-500/30">
+            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path></svg>
+            {t("Sign Out")}
+          </button>
         </div>
-      )}
+      </div>
 
       {/* 📦 MAIN CONTENT */}
       <main className="flex-1 flex flex-col pt-16 md:pt-0 max-h-screen overflow-y-auto">
