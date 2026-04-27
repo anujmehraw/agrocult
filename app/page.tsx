@@ -5,78 +5,83 @@ import { useRouter } from "next/navigation";
 // COMPONENTS
 import Dashboard from "../components/Dashboard";
 import Crop from "../components/Crop";
-import Chatbot from "../components/Chatbot";
-import Gallery from "../components/Gallery";
+import Marketplace from "../components/Marketplace";
 import Recommendation from "../components/Recommendation";
-import { clearUser, getUser } from "../lib/authStorage";
+import FloatingChat from "../components/FloatingChat";
 
 export default function Home() {
   const [active, setActive] = useState("home");
   const router = useRouter();
 
+  // 🔐 Auth check
   useEffect(() => {
-    const u = getUser();
-    if (!u) router.replace("/login");
+    const u = localStorage.getItem("user");
+    if (!u) router.push("/login");
   }, []);
 
+  // 🔓 Logout
   const logout = () => {
-    clearUser();
-    router.replace("/login");
+    localStorage.clear();
+    window.location.href = "/login";
   };
 
   return (
-    <div className="min-h-screen text-amber-950">
-      <div className="mx-auto w-full max-w-6xl px-4 pb-8 pt-6 sm:px-6 lg:px-8">
-        <div className="mb-4 p-1 sm:p-2">
-          <div className="flex flex-wrap items-center justify-between gap-3">
-            <div>
-              <p className="text-xs font-semibold uppercase tracking-[0.2em] text-emerald-700">
-                Khet Control Panel
-              </p>
-              <h1 className="text-2xl font-bold text-amber-950 sm:text-3xl">
-                🌾 Agrocult
-              </h1>
-            </div>
+    <div className="min-h-screen bg-gradient-to-br from-green-50 via-white to-green-100 text-gray-900">
 
+      {/* 🌾 HEADER */}
+      <div className="bg-white shadow-sm px-4 py-3 flex justify-between items-center">
+        <h1 className="text-xl font-bold text-green-700">
+          🌾 Agrocult
+        </h1>
+
+        <button
+          onClick={logout}
+          className="bg-red-500 text-white px-3 py-1 rounded-lg text-sm hover:bg-red-600"
+        >
+          Logout
+        </button>
+      </div>
+
+      {/* 🚀 NAVIGATION */}
+      <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 p-4">
+
+        {[
+          ["home", "🏠 Home"],
+          ["recommendation", "🌱 Recommend"],
+          ["crop", "📷 Crop Scan"],
+          ["marketplace", "🛒 Marketplace"],
+        ].map(([key, label]) => (
           <button
-            onClick={logout}
-            className="rounded-xl border border-red-100 bg-red-500 px-4 py-2 text-sm font-semibold text-white shadow transition hover:bg-red-600 active:scale-[0.99]"
-          >
-            Logout
-          </button>
-        </div>
-        </div>
-
-        <div className="mb-5 flex flex-wrap gap-2">
-          {[
-            ["home", "Home"],
-            ["recommendation", "Recommend"],
-            ["crop", "Crop Scan"],
-            ["chat", "Chat"],
-            ["gallery", "Gallery"],
-          ].map(([key, label]) => (
-            <button
-              key={key}
-              onClick={() => setActive(key)}
-              className={`px-3 py-2 text-sm font-medium transition ${
+            key={key}
+            onClick={() => setActive(key)}
+            className={`p-4 rounded-xl shadow-sm border text-sm font-medium transition
+              ${
                 active === key
-                  ? "text-emerald-700 underline underline-offset-4"
-                  : "text-amber-900 hover:text-emerald-700"
+                  ? "bg-green-600 text-white"
+                  : "bg-white hover:bg-green-50"
               }`}
-            >
-              {label}
-            </button>
-          ))}
-        </div>
+          >
+            {label}
+          </button>
+        ))}
 
-        <main className="p-1 sm:p-2">
+      </div>
+
+      {/* 📦 CONTENT */}
+      <div className="px-4 pb-20">
+        <div className="bg-white rounded-2xl shadow-md p-4">
+
           {active === "home" && <Dashboard />}
           {active === "recommendation" && <Recommendation />}
           {active === "crop" && <Crop />}
-          {active === "chat" && <Chatbot />}
-          {active === "gallery" && <Gallery />}
-        </main>
+          {active === "marketplace" && <Marketplace />}
+
+        </div>
       </div>
+
+      {/* 💬 FLOATING CHATBOT */}
+      <FloatingChat />
+
     </div>
   );
 }

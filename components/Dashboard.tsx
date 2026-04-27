@@ -1,11 +1,5 @@
 "use client";
 import { useEffect, useState } from "react";
-import Satellite from "./Satellite";
-
-<Satellite />
-import YieldChart from "./YieldChart";
-
-<YieldChart />
 import {
   LineChart,
   Line,
@@ -21,8 +15,11 @@ export default function Dashboard() {
   const [news, setNews] = useState<any[]>([]);
   const [error, setError] = useState("");
 
+  const lat = 23.2599;
+  const lon = 77.4126;
+
   useEffect(() => {
-    const fetchData = async () => {
+    const fetchAll = async () => {
       try {
         // 🌤 WEATHER
         const weatherRes = await fetch(
@@ -43,7 +40,7 @@ export default function Dashboard() {
         setData(chartData);
         setCurrent(weatherJson.list[0]);
 
-        // 📰 NEWS (India farming focused)
+        // 📰 NEWS
         const newsRes = await fetch(
           `https://newsapi.org/v2/everything?q=agriculture+india&sortBy=publishedAt&apiKey=${process.env.NEXT_PUBLIC_NEWS_API_KEY}`
         );
@@ -52,30 +49,34 @@ export default function Dashboard() {
         if (newsJson.status === "ok") {
           setNews(newsJson.articles.slice(0, 5));
         }
-
       } catch {
         setError("Failed to load data");
       }
     };
 
-    fetchData();
+    fetchAll();
   }, []);
 
   return (
     <div className="space-y-5">
-      <h2 className="text-2xl font-bold text-amber-950">
-        🌾 Today in Your Farm
+
+      <h2 className="text-xl font-bold text-green-700">
+        🌾 Smart Farming Dashboard
       </h2>
 
-      {error && <p className="rounded-xl bg-red-50 px-3 py-2 text-sm text-red-600">{error}</p>}
+      {error && <p className="text-red-600">{error}</p>}
 
-      {/* WEATHER */}
-      <div className="grid gap-4 md:grid-cols-2">
-        <div className="rounded-2xl border border-emerald-100 bg-lime-50 p-4 shadow-sm">
-          <h3 className="mb-3 font-semibold text-amber-900">📈 Field Temperature (Next Hours)</h3>
+      {/* 🌤 WEATHER */}
+      <div className="grid md:grid-cols-2 gap-4">
+
+        {/* 📈 CHART */}
+        <div className="bg-green-50 p-4 rounded-xl shadow">
+          <h3 className="font-semibold mb-3">
+            📈 Temperature Forecast
+          </h3>
 
           {!data.length ? (
-            <p>Loading...</p>
+            <p>Loading chart...</p>
           ) : (
             <ResponsiveContainer width="100%" height={250}>
               <LineChart data={data}>
@@ -93,9 +94,10 @@ export default function Dashboard() {
           )}
         </div>
 
-        <div className="space-y-2 rounded-2xl border border-amber-100 bg-amber-50 p-4 shadow-sm">
+        {/* 📊 WEATHER DETAILS */}
+        <div className="bg-white p-4 rounded-xl shadow space-y-2">
           {!current ? (
-            <p className="text-amber-700">Loading...</p>
+            <p>Loading...</p>
           ) : (
             <>
               <p><b>📍 City:</b> Bhopal</p>
@@ -107,39 +109,65 @@ export default function Dashboard() {
             </>
           )}
         </div>
+
       </div>
 
+      {/* 🧠 INSIGHTS */}
       {current && (
-        <div className="rounded-2xl border border-emerald-200 bg-lime-50 p-4 shadow-sm">
-          <h3 className="mb-2 font-semibold text-amber-900">🧠 Farming Insight</h3>
-          <p className="text-sm text-amber-800">
+        <div className="bg-green-100 p-4 rounded-xl shadow">
+          <h3 className="font-semibold mb-2">
+            🧠 Farming Insight
+          </h3>
+
+          <p className="text-sm">
             {current.main.humidity > 70
-              ? "High humidity — risk of crop disease."
-              : "Humidity is normal."}
+              ? "High humidity — risk of crop disease. Avoid overwatering."
+              : "Humidity normal — good for crops."}
+          </p>
+
+          <p className="text-sm mt-2">
+            {current.wind.speed > 5
+              ? "Strong winds — avoid spraying pesticides."
+              : "Wind conditions are safe."}
           </p>
         </div>
       )}
 
-      <div className="rounded-2xl border border-emerald-100 bg-amber-50 p-4 shadow-sm">
-        <h3 className="mb-3 font-semibold text-amber-950">
-          📰 Krishi News
+      {/* 🛰 SATELLITE MAP (NO API KEY) */}
+      <div className="bg-white p-4 rounded-xl shadow">
+        <h3 className="font-semibold mb-2">
+          🛰 Satellite View
+        </h3>
+
+        <iframe
+          src={`https://maps.google.com/maps?q=${lat},${lon}&t=k&z=15&output=embed`}
+          className="w-full h-[300px] rounded-lg"
+        />
+
+        <p className="text-sm text-gray-600 mt-2">
+          Satellite map (no API key required)
+        </p>
+      </div>
+
+      {/* 📰 NEWS */}
+      <div className="bg-white p-4 rounded-xl shadow">
+        <h3 className="font-semibold mb-3">
+          📰 Agriculture News
         </h3>
 
         {!news.length ? (
           <p>Loading news...</p>
         ) : (
           <div className="space-y-3">
-
             {news.map((item, i) => (
               <a
                 key={i}
                 href={item.url}
                 target="_blank"
-                rel="noreferrer"
-                className="block rounded-xl border border-amber-100 bg-white p-3 transition hover:border-emerald-300 hover:bg-lime-50"
+                className="block border-b pb-2 hover:text-green-600"
               >
-                <p className="font-medium text-amber-950">{item.title}</p>
-                <p className="text-sm text-amber-700">
+                <p className="font-medium">{item.title}</p>
+                <p className="text-sm text-gray-600">
                   {item.source.name}
                 </p>
               </a>
@@ -147,6 +175,7 @@ export default function Dashboard() {
           </div>
         )}
       </div>
+
     </div>
   );
 }
