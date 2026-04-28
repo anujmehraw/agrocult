@@ -3,14 +3,13 @@ import { useState, useRef, useEffect } from "react";
 import { useTranslation } from "../lib/useTranslation";
 
 export default function Chatbot() {
-  const { t } = useTranslation();
+  const { t, language } = useTranslation();
   const [chat, setChat] = useState<any[]>([]);
   const [input, setInput] = useState("");
   const [listening, setListening] = useState(false);
   const [loading, setLoading] = useState(false);
   const [voices, setVoices] = useState<any[]>([]);
   const [lang, setLang] = useState("en-IN");
-  const [appLanguage, setAppLanguage] = useState("English");
 
   const LANG_MAP: Record<string, string> = {
     "English": "en-IN",
@@ -24,14 +23,10 @@ export default function Chatbot() {
   };
 
   useEffect(() => {
-    const savedLang = localStorage.getItem("appLanguage");
-    if (savedLang) {
-      setAppLanguage(savedLang);
-      if (LANG_MAP[savedLang]) {
-        setLang(LANG_MAP[savedLang]);
-      }
+    if (language && LANG_MAP[language]) {
+      setLang(LANG_MAP[language]);
     }
-  }, []);
+  }, [language]);
 
   const recognitionRef = useRef<any>(null);
 
@@ -114,7 +109,7 @@ export default function Chatbot() {
 
     try {
       const messages = [
-        { role: "system", content: `You are a helpful agricultural AI assistant. Act as a personal, friendly agronomist. Adopt a very warm, human, empathetic, and conversational tone. Speak to the user like a trusted friend. Avoid robotic or overly academic language. You MUST respond strictly in ${appLanguage}. If the user speaks in a certain language, reply in that same language.` },
+        { role: "system", content: `You are a helpful agricultural AI assistant. Act as a personal, friendly agronomist. Adopt a very warm, human, empathetic, and conversational tone. Speak to the user like a trusted friend. Avoid robotic or overly academic language. CRITICAL: You MUST respond strictly in ${language}.` },
         ...chat.map(m => ({ role: m.role === "bot" ? "assistant" : "user", content: m.text })),
         { role: "user", content: userMsg }
       ];

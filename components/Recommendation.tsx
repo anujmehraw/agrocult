@@ -4,7 +4,7 @@ import { useTranslation } from "../lib/useTranslation";
 import { useSpeechRecognition } from "../lib/useSpeechRecognition";
 
 export default function Recommendation() {
-  const { t } = useTranslation();
+  const { t, language } = useTranslation();
   const [loading, setLoading] = useState(false);
   const [status, setStatus] = useState("");
   const [result, setResult] = useState<any>(null);
@@ -111,13 +111,11 @@ export default function Recommendation() {
     const currentQ = question;
     setQuestion("");
     
-    const lang = localStorage.getItem("appLanguage") || "English";
-
     const contextPrompt = `You are a helpful AI agricultural expert. I have been recommended to grow ${result.crop} in my geographical area (${result.location}).
 The current weather is ${result.weather}, satellite NDVI is ${result.satellite.split(':')[1].trim()}, and the soil profile used is ${result.soil.replace('Auto-Detected Regional Soil ', '').replace('Manual Soil Data ', '')}.
 Historical yield score is ${result.historical.split(':')[1].trim()}.
 Please answer my question and base your answer heavily on this geographical and agricultural data. Act as my personal, friendly agronomist. Adopt a very warm, human, empathetic, and conversational tone. Speak to me like a trusted friend. Avoid robotic or overly academic language.
-IMPORTANT: You MUST respond strictly in ${lang}.`;
+IMPORTANT: You MUST respond strictly in ${language}.`;
 
     const messages = [
       { role: "system", content: contextPrompt },

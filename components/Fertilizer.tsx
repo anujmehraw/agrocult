@@ -4,7 +4,7 @@ import { useTranslation } from "../lib/useTranslation";
 import { useSpeechRecognition } from "../lib/useSpeechRecognition";
 
 export default function Fertilizer() {
-  const { t } = useTranslation();
+  const { t, language } = useTranslation();
   const [loading, setLoading] = useState(false);
   const [result, setResult] = useState<any>(null);
 
@@ -93,7 +93,7 @@ Format:
   "urea": 120,
   "dap": 50,
   "mop": 40,
-  "advice": "A short, expert agronomic advice (max 2 sentences) in ${localStorage.getItem("appLanguage") || "English"} based on the NPK and pH levels."
+  "advice": "A short, expert agronomic advice (max 2 sentences) in ${language} based on the NPK and pH levels."
 }`;
 
       const res = await fetch("/api/chat", {
@@ -145,12 +145,10 @@ Format:
     const currentQ = question;
     setQuestion("");
     
-    const lang = localStorage.getItem("appLanguage") || "English";
-
     const contextPrompt = `You are a helpful AI agricultural expert. I have just used the Fertilizer Optimizer for ${crop} with N:${n}, P:${p}, K:${k}, pH:${ph}. 
 You recommended: Urea=${result.urea}kg, DAP=${result.dap}kg, MOP=${result.mop}kg.
 Please answer my follow-up question. Act as my personal, friendly agronomist. Adopt a very warm, human, empathetic, and conversational tone. Speak to me like a trusted friend. Avoid robotic or overly academic language.
-IMPORTANT: You MUST respond strictly in ${lang}.`;
+IMPORTANT: You MUST respond strictly in ${language}.`;
 
     const messages = [
       { role: "system", content: contextPrompt },

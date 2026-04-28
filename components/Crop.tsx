@@ -3,7 +3,7 @@ import { useRef, useState } from "react";
 import { useTranslation } from "../lib/useTranslation";
 
 export default function Crop() {
-  const { t } = useTranslation();
+  const { t, language } = useTranslation();
   const cameraRef = useRef<HTMLInputElement>(null);
   const fileRef = useRef<HTMLInputElement>(null);
 
@@ -32,11 +32,9 @@ export default function Crop() {
     setLoading(true);
     setError("");
 
-    const lang = localStorage.getItem("appLanguage") || "English";
-
     const formData = new FormData();
     formData.append("file", file);
-    formData.append("language", lang);
+    formData.append("language", language);
 
     try {
       const res = await fetch("/api/predict", {
@@ -80,13 +78,11 @@ export default function Crop() {
     if (!currentQ.trim() || asking) return;
     setAsking(true);
 
-    const lang = localStorage.getItem("appLanguage") || "English";
-
     const contextPrompt = `The user has just scanned a crop leaf and the AI detected: ${result.disease}. 
 Confidence: ${(result.confidence * 100).toFixed(1)}%. 
 Treatment provided: ${result.treatment}. 
 You are a helpful agricultural expert. Answer the user's follow-up question specifically about this disease or treatment. 
-IMPORTANT: You MUST respond strictly in ${lang}.`;
+IMPORTANT: You MUST respond strictly in ${language}.`;
 
     const messages = [
       { role: "system", content: contextPrompt },

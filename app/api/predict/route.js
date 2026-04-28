@@ -1,5 +1,4 @@
 import { NextResponse } from "next/server";
-import { GoogleGenerativeAI } from "@google/generative-ai";
 
 export async function POST(req) {
   try {
@@ -16,28 +15,20 @@ export async function POST(req) {
     const base64 = Buffer.from(bytes).toString("base64");
     const mimeType = file.type?.startsWith("image/") ? file.type : "image/jpeg";
 
-    const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
-    const model = genAI.getGenerativeModel({ 
-      model: "gemini-flash-latest",
-      generationConfig: {
-        responseMimeType: "application/json",
-      }
-    });
-
-    const prompt = `You are a highly precise agricultural plant pathologist AI. 
-Analyze this plant image and identify any diseases, pests, or deficiencies. 
+    const prompt = `You are a highly precise agricultural plant pathologist AI.
+Analyze this plant/crop leaf image and identify any diseases, pests, or nutrient deficiencies.
 CRITICAL: You MUST write the 'name' and 'chemical' text strictly in ${language}.
-Return ONLY a strictly valid JSON object (no markdown, no backticks) with this EXACT structure:
+Return ONLY a strictly valid JSON object (no markdown, no backticks, no explanation) with this EXACT structure:
 {
   "result": {
     "disease": {
       "suggestions": [
         {
-          "name": "Name of the Disease or 'Healthy'",
-          "probability": 0.98,
+          "name": "Name of the Disease or 'Healthy' if the plant looks fine",
+          "probability": 0.95,
           "details": {
             "treatment": {
-              "chemical": ["Provide a highly detailed analysis: What the disease is, why it happened, and specific step-by-step organic and chemical treatments."]
+              "chemical": ["Provide a highly detailed multi-paragraph analysis: What the disease is, why it happened, visible symptoms to confirm, and specific step-by-step organic AND chemical treatments with dosage guidance."]
             }
           }
         }
@@ -46,30 +37,58 @@ Return ONLY a strictly valid JSON object (no markdown, no backticks) with this E
   }
 }`;
 
-    const imagePart = {
-      inlineData: {
-        data: base64,
-        mimeType: mimeType
-      }
-    };
+    const response = await fetch("https://api.groq.com/openai/v1/chat/completions", {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${process.env.GROQ_API_KEY}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        model: "meta-llama/llama-4-scout-17b-16e-instruct",
+        messages: [
+          {
+            role: "user",
+            content: [
+              {
+                type: "text",
+                text: prompt,
+              },
+              {
+                type: "image_url",
+                image_url: {
+                  url: `data:${mimeType};base64,${base64}`,
+                },
+              },
+            ],
+          },
+        ],
+        max_tokens: 1500,
+        temperature: 0.2,
+      }),
+    });
 
-    const result = await model.generateContent([prompt, imagePart]);
-    let responseText = result.response.text();
-    
-    // Safely parse JSON even if there are formatting artifacts
-    responseText = responseText.replace(/```json/g, "").replace(/```/g, "").trim();
-    
+    const groqData = await response.json();
+
+    if (!response.ok) {
+      throw new Error(groqData.error?.message || "Groq API error");
+    }
+
+    let responseText = groqData.choices?.[0]?.message?.content || "";
+
+    // Strip any accidental markdown fences
+    responseText = responseText.replace(/```json/gi, "").replace(/```/g, "").trim();
+
     let data;
     try {
       data = JSON.parse(responseText);
     } catch (parseError) {
-      console.error("Failed to parse Gemini JSON:", responseText);
+      console.error("Failed to parse Groq JSON:", responseText);
       throw new Error("AI returned malformed data. Please try again.");
     }
 
     return NextResponse.json(data);
   } catch (err) {
-    console.error("Gemini API Error:", err);
+    console.error("Predict API Error:", err);
     return NextResponse.json({ error: err.message || "Prediction failed" }, { status: 500 });
   }
 }
