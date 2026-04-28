@@ -14,7 +14,7 @@ import { useTranslation } from "../lib/useTranslation";
 
 // Generate fake 30-day historical data + 7 day forecast based on the LIVE current price
 const generateHistoryAndForecast = (min: number, max: number, trend: string) => {
-  const data = [];
+  const data: any[] = [];
   let currentPrice = trend === "up" ? min : max;
   
   // History
@@ -177,7 +177,7 @@ export default function Marketplace() {
                 <YAxis domain={['auto', 'auto']} axisLine={false} tickLine={false} tick={{fill: '#6b7280', fontSize: 12}} tickFormatter={(val) => `₹${val}`} />
                 <Tooltip 
                   contentStyle={{ borderRadius: '12px', border: 'none', boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)' }}
-                  formatter={(value: any, name: string) => [`₹${value}`, name === 'price' ? t('Historical Price') : t('AI Forecast')]}
+                  formatter={(value: any, name: any) => [`₹${value}`, name === 'price' ? t('Historical Price') : t('AI Forecast')]}
                 />
                 <Legend verticalAlign="top" height={36}/>
                 <Line 
