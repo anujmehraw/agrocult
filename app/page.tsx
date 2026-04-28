@@ -102,15 +102,28 @@ export default function Home() {
   ];
 
   return (
-    <div className="min-h-screen flex flex-col text-slate-900 bg-slate-50">
+    <div className="min-h-screen flex flex-col relative" style={{ backgroundColor: "#f2ece0", color: "#1c1208" }}>
+
+      {/* 🌾 Farm background image — fixed, soft opacity */}
+      <div
+        aria-hidden="true"
+        className="fixed inset-0 z-0 pointer-events-none"
+        style={{
+          backgroundImage: "url('/farm_background.png')",
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+          backgroundRepeat: "no-repeat",
+          opacity: 0.10,
+        }}
+      />
       
-      {/* 🚀 TOP NAVIGATION BAR */}
-      <header className="sticky top-0 z-[80] w-full bg-white border-b border-slate-200 shadow-sm px-4 md:px-8 py-3 flex items-center justify-between">
+      {/* 🌾 TOP NAVIGATION BAR — Deep Forest Green */}
+      <header className="sticky top-0 z-[80] w-full px-4 md:px-8 py-3 flex items-center justify-between" style={{ backgroundColor: "#2d5a2e", borderBottom: "2px solid #1e3d20" }}>
         
         {/* Logo */}
         <div className="flex items-center gap-2 cursor-pointer" onClick={() => setActive("home")}>
-          <svg className="w-8 h-8 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"></path></svg>
-          <h1 className="text-2xl font-extrabold text-green-800 tracking-tight hidden sm:block">Agrocult</h1>
+          <svg className="w-8 h-8" style={{ color: "#c8961e" }} fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"></path></svg>
+          <h1 className="text-2xl font-extrabold tracking-tight hidden sm:block" style={{ color: "#f5f0e8", fontFamily: "Georgia, serif" }}>🌾 Agrocult</h1>
         </div>
 
         {/* Global Search (Desktop) */}
@@ -125,20 +138,22 @@ export default function Home() {
           <div className="relative">
             <button 
               onClick={() => setIsLangMenuOpen(!isLangMenuOpen)}
-              className="flex items-center gap-1.5 text-sm font-semibold text-slate-600 hover:text-slate-900 bg-slate-100 hover:bg-slate-200 px-3 py-2 rounded-lg transition"
+              className="flex items-center gap-1.5 text-sm font-semibold px-3 py-2 rounded-lg transition"
+              style={{ backgroundColor: "rgba(255,255,255,0.12)", color: "#f5f0e8" }}
             >
-              <svg className="w-4 h-4 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 5h12M9 3v2m1.048 9.5A18.022 18.022 0 016.412 9m6.088 9h7M11 21l5-10 5 10M12.751 5C11.783 10.77 8.07 15.61 3 18.129"></path></svg>
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 5h12M9 3v2m1.048 9.5A18.022 18.022 0 016.412 9m6.088 9h7M11 21l5-10 5 10M12.751 5C11.783 10.77 8.07 15.61 3 18.129"></path></svg>
               <span className="hidden sm:block">{LANGUAGES.find(l => l.code === currentLang)?.name || currentLang}</span>
               <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7"></path></svg>
             </button>
             
             {isLangMenuOpen && (
-              <div className="absolute top-full right-0 mt-2 w-40 bg-white rounded-xl shadow-lg border border-slate-200 py-2 z-[90] animate-fade-in">
+              <div className="absolute top-full right-0 mt-2 w-40 rounded-xl shadow-lg py-2 z-[90] animate-fade-in" style={{ backgroundColor: "#faf6ef", border: "1px solid #c8b89a" }}>
                 {LANGUAGES.map((lang) => (
                   <button
                     key={lang.code}
                     onClick={() => changeLanguage(lang.code)}
-                    className="w-full text-left px-4 py-2 text-sm text-slate-700 hover:bg-slate-50 hover:text-green-600 font-medium"
+                    className="w-full text-left px-4 py-2 text-sm font-medium transition"
+                    style={{ color: "#2d5a2e" }}
                   >
                     {lang.name}
                   </button>
@@ -150,7 +165,7 @@ export default function Home() {
           {/* Hamburger Menu Icon */}
           <button 
             onClick={() => setIsMenuOpen(true)}
-            className="p-2 text-slate-600 hover:text-green-600 hover:bg-green-50 rounded-lg transition"
+            className="p-2 rounded-lg transition" style={{ color: "#f5f0e8" }}
           >
             <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
           </button>
@@ -158,20 +173,20 @@ export default function Home() {
       </header>
 
       {/* MOBILE SEARCH BAR */}
-      <div className="md:hidden p-4 border-b border-slate-200 bg-white z-[70]">
+      <div className="md:hidden p-4 z-[70] relative" style={{ backgroundColor: "#3d6b3f", borderBottom: "1px solid #2d5a2e" }}>
          <GlobalSearch />
       </div>
 
       {/* 📱 SLIDE-OUT MENU DRAWER */}
       <div className={`fixed inset-0 z-[100] transition-transform duration-300 ${isMenuOpen ? "translate-x-0" : "translate-x-full"}`}>
         {/* Backdrop */}
-        <div className="absolute inset-0 bg-black/50 backdrop-blur-sm" onClick={() => setIsMenuOpen(false)}></div>
+        <div className="absolute inset-0 bg-black/60" onClick={() => setIsMenuOpen(false)}></div>
         
-        {/* Menu Panel */}
-        <div className="absolute right-0 top-0 bottom-0 w-72 bg-white shadow-2xl flex flex-col border-l border-slate-200">
-          <div className="flex justify-between items-center p-6 border-b border-slate-100">
-            <h2 className="text-xl font-extrabold text-slate-800">{t("Menu")}</h2>
-            <button onClick={() => setIsMenuOpen(false)} className="text-slate-400 hover:text-red-500 p-2 rounded-full hover:bg-slate-50 transition">
+        {/* Menu Panel — earthy dark green */}
+        <div className="absolute right-0 top-0 bottom-0 w-72 shadow-2xl flex flex-col" style={{ backgroundColor: "#2d5a2e", borderLeft: "2px solid #1e3d20" }}>
+          <div className="flex justify-between items-center p-6" style={{ borderBottom: "1px solid rgba(255,255,255,0.15)" }}>
+            <h2 className="text-xl font-extrabold" style={{ color: "#f5f0e8", fontFamily: "Georgia, serif" }}>🌿 {t("Menu")}</h2>
+            <button onClick={() => setIsMenuOpen(false)} className="p-2 rounded-full transition" style={{ color: "#c8b89a" }}>
               <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12"></path></svg>
             </button>
           </div>
@@ -181,18 +196,20 @@ export default function Home() {
               <button
                 key={item.id}
                 onClick={() => { setActive(item.id); setIsMenuOpen(false); }}
-                className={`flex items-center gap-3 px-4 py-3.5 rounded-xl transition-all duration-200 font-semibold text-sm mb-1 ${
-                  active === item.id ? "bg-green-50 text-green-700" : "text-slate-600 hover:bg-slate-50 hover:text-slate-900"
-                }`}
+                className="flex items-center gap-3 px-4 py-3.5 rounded-xl transition-all duration-200 font-semibold text-sm mb-1"
+                style={active === item.id
+                  ? { backgroundColor: "rgba(200,150,30,0.25)", color: "#c8961e" }
+                  : { color: "#c8d8c8" }
+                }
               >
-                <span className={active === item.id ? "text-green-600" : "text-slate-400"}>{item.icon}</span>
+                <span>{item.icon}</span>
                 {t(item.label)}
               </button>
             ))}
           </nav>
           
-          <div className="p-4 border-t border-slate-100">
-            <button onClick={logout} className="w-full flex items-center justify-center gap-2 bg-red-50 text-red-600 hover:bg-red-100 py-3 rounded-xl transition font-bold text-sm">
+          <div className="p-4" style={{ borderTop: "1px solid rgba(255,255,255,0.15)" }}>
+            <button onClick={logout} className="w-full flex items-center justify-center gap-2 py-3 rounded-xl transition font-bold text-sm" style={{ backgroundColor: "rgba(200,80,60,0.25)", color: "#ffb3a0" }}>
               <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path></svg>
               {t("Sign Out")}
             </button>
@@ -201,9 +218,9 @@ export default function Home() {
       </div>
 
       {/* 📦 MAIN CONTENT */}
-      <main className="flex-1 overflow-y-auto p-4 md:p-8">
+      <main className="flex-1 overflow-y-auto p-4 md:p-8 relative z-10">
         <div className="max-w-7xl mx-auto w-full">
-          <div className="card p-6 md:p-8 min-h-[80vh]">
+          <div className="p-6 md:p-8 min-h-[80vh] rounded-xl" style={{ backgroundColor: "#faf6ef", border: "1px solid #c8b89a", boxShadow: "0 2px 12px rgba(107,66,38,0.10)" }}>
             {active === "home" && <Dashboard />}
             {active === "recommendation" && <Recommendation />}
             {active === "disease" && <Crop />}

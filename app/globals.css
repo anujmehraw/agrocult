@@ -1,13 +1,21 @@
 @import "tailwindcss";
 
 :root {
-  --background: #f8fafc; /* Slate 50 for a clean, crisp enterprise background */
-  --foreground: #0f172a; /* Slate 900 for extremely readable text */
-  --color-green-50: #f0fdf4;
-  --color-green-100: #dcfce7;
-  --color-green-500: #22c55e;
-  --color-green-700: #15803d;
-  --color-green-900: #14532d;
+  /* 🌾 Earthy Farming Palette */
+  --background: #f2ece0;        /* Warm parchment — like dried wheat */
+  --foreground: #1c1208;        /* Deep soil brown — very readable */
+
+  --card-bg: #faf6ef;           /* Warm cream for cards */
+  --card-border: #c8b89a;       /* Earthy tan border */
+
+  --green-primary: #2d5a2e;     /* Deep forest green */
+  --green-light: #4a7c4e;       /* Natural mid-green */
+  --green-pale: #e8f0e8;        /* Very soft green for hover states */
+
+  --wheat: #c8961e;             /* Golden wheat accent */
+  --soil: #6b4226;              /* Rich brown */
+
+  --text-muted: #7a6a55;        /* Muted earthy tone */
 }
 
 @theme inline {
@@ -19,40 +27,36 @@ body {
   background-color: var(--background);
   color: var(--foreground);
   min-height: 100vh;
+  font-family: 'Georgia', 'Times New Roman', serif;
 }
 
-/* Professional Enterprise Card */
+/* 🌿 Earthy Card — warm cream with soil border */
 .glass,
 .card {
-  background-color: #ffffff;
-  border: 1px solid #e2e8f0; /* Slate 200 crisp border */
-  border-radius: 16px; /* Slightly tighter radius than 24px */
-  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.04), 0 1px 2px -1px rgba(0, 0, 0, 0.02); /* Extremely subtle elevation */
+  background-color: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: 12px;
+  box-shadow: 0 2px 8px 0 rgba(107, 66, 38, 0.08), 0 1px 2px 0 rgba(107, 66, 38, 0.04);
 }
 
-/* Sidebar Styling */
+/* 🌲 Dark green sidebar/drawer panel */
 .glass-dark,
 .sidebar-panel {
-  background-color: #0f172a; /* Solid Slate 900 for a serious, grounded sidebar */
-  border-right: 1px solid #1e293b;
-  box-shadow: none; /* Removed internal shadow for flat design */
+  background-color: var(--green-primary);
+  border-right: 1px solid #1e3d20;
+  box-shadow: none;
 }
 
-/* Base animations for smooth enterprise feel */
+/* Smooth animations */
 @keyframes fadeIn {
   from { opacity: 0; }
-  to { opacity: 1; }
+  to   { opacity: 1; }
 }
 
 @keyframes slideUp {
   from { opacity: 0; transform: translateY(10px); }
-  to { opacity: 1; transform: translateY(0); }
+  to   { opacity: 1; transform: translateY(0); }
 }
 
-.animate-fade-in {
-  animation: fadeIn 0.4s ease-out forwards;
-}
-
-.animate-slide-up {
-  animation: slideUp 0.4s ease-out forwards;
-}
+.animate-fade-in  { animation: fadeIn  0.4s ease-out forwards; }
+.animate-slide-up { animation: slideUp 0.4s ease-out forwards; }
