@@ -7,8 +7,10 @@ import {
   Tooltip,
   ResponsiveContainer,
 } from "recharts";
+import { useTranslation } from "../lib/useTranslation";
 
 export default function YieldChart() {
+  const { t } = useTranslation();
 
   const data = [
     { year: "2019", yield: 2.1 },
@@ -22,7 +24,7 @@ export default function YieldChart() {
     <div className="bg-white p-4 rounded-xl shadow">
 
       <h3 className="font-semibold mb-3">
-        🌾 Crop Yield Trend (tons/hectare)
+        🌾 {t("Crop Yield Trend (tons/hectare)")}
       </h3>
 
       <ResponsiveContainer width="100%" height={250}>

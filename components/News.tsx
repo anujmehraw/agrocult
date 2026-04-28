@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { useTranslation } from "../lib/useTranslation";
 
 export default function News() {
-  const { t } = useTranslation();
+  const { t, language } = useTranslation();
   const [news, setNews] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -18,8 +18,24 @@ export default function News() {
         
         if (data.status === "ok" && data.articles.length > 0) {
           // Filter out removed articles
-          const validArticles = data.articles.filter((a: any) => a.title !== "[Removed]" && a.url);
-          setNews(validArticles.slice(0, 6));
+          const validArticles = data.articles.filter((a: any) => a.title !== "[Removed]" && a.url).slice(0, 6);
+          
+          // Translate if not English
+          if (language !== "English") {
+            const transRes = await fetch("/api/translate-news", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ articles: validArticles, targetLanguage: language })
+            });
+            const transData = await transRes.json();
+            if (transData.success) {
+              setNews(transData.articles);
+            } else {
+              setNews(validArticles);
+            }
+          } else {
+            setNews(validArticles);
+          }
         } else {
           throw new Error("API failed or empty");
         }
@@ -28,23 +44,23 @@ export default function News() {
         // 🔥 Indian-focused fallback
         setNews([
           {
-            title: "PM Kisan Samman Nidhi 16th Installment Released",
-            description: "Millions of farmers across India receive direct financial assistance ahead of the sowing season.",
+            title: t("PM Kisan Samman Nidhi 16th Installment Released"),
+            description: t("Millions of farmers across India receive direct financial assistance ahead of the sowing season."),
             url: "#"
           },
           {
-            title: "IMD Predicts Favorable Monsoon for Kharif Crops",
-            description: "The Indian Meteorological Department forecasts above-average rainfall, boosting hopes for a record rice and soybean harvest.",
+            title: t("IMD Predicts Favorable Monsoon for Kharif Crops"),
+            description: t("The Indian Meteorological Department forecasts above-average rainfall, boosting hopes for a record rice and soybean harvest."),
             url: "#"
           },
           {
-            title: "Rise of Agritech Startups in Maharashtra and Gujarat",
-            description: "Local farmers are increasingly adopting drone technology and AI for precision agriculture.",
+            title: t("Rise of Agritech Startups in Maharashtra and Gujarat"),
+            description: t("Local farmers are increasingly adopting drone technology and AI for precision agriculture."),
             url: "#"
           },
           {
-            title: "Government Announces New MSP for Wheat and Mustard",
-            description: "The minimum support price has been increased to ensure better margins for farmers this rabi season.",
+            title: t("Government Announces New MSP for Wheat and Mustard"),
+            description: t("The minimum support price has been increased to ensure better margins for farmers this rabi season."),
             url: "#"
           }
         ]);
@@ -54,7 +70,7 @@ export default function News() {
     };
 
     fetchNews();
-  }, []);
+  }, [language, t]);
 
   return (
     <div className="space-y-4">

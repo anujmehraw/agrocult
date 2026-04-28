@@ -15,6 +15,7 @@ export const translations: Record<string, Record<string, string>> = {
 
     // Dashboard
     "Farm Overview": "Farm Overview",
+    "Crop Yield Trend (tons/hectare)": "Crop Yield Trend (tons/hectare)",
     "Real-time insights for your fields in Bhopal, MP.": "Real-time insights for your fields in Bhopal, MP.",
     "Current Weather": "Current Weather",
     "Humidity Level": "Humidity Level",
@@ -64,6 +65,32 @@ export const translations: Record<string, Record<string, string>> = {
     "Min Price": "Min Price",
     "Max Price": "Max Price",
     "Modal Price": "Modal Price",
+    "Live Mandi Rates & Forecast": "Live Mandi Rates & Forecast",
+    "Real-time market prices fetched directly from Agmarknet API.": "Real-time market prices fetched directly from Agmarknet API.",
+    "Fetching live agricultural market data from data.gov.in...": "Fetching live agricultural market data from data.gov.in...",
+    "Back": "Back",
+    "Price Trend & AI Forecast": "Price Trend & AI Forecast",
+    "National Avg Rate": "National Avg Rate",
+    "Today": "Today",
+    "30d High": "30d High",
+    "30d Low": "30d Low",
+    "7-Day AI Prediction": "7-Day AI Prediction",
+    "Expected to Rise": "Expected to Rise",
+    "Expected to Fall": "Expected to Fall",
+    "Recommendation": "Recommendation",
+    "Hold / Wait": "Hold / Wait",
+    "Sell Now": "Sell Now",
+    "Historical Price": "Historical Price",
+    "AI Forecast": "AI Forecast",
+    "7-Day AI Forecast": "7-Day AI Forecast",
+    "AI Market Insight": "AI Market Insight",
+    "Based on predictive analysis of recent volume trends and regional weather disruptions, ": "Based on predictive analysis of recent volume trends and regional weather disruptions, ",
+    " prices are projected to ": " prices are projected to ",
+    "increase": "increase",
+    "decrease": "decrease",
+    "over the coming week. Adjust your selling schedule accordingly.": "over the coming week. Adjust your selling schedule accordingly.",
+    "Min Range": "Min Range",
+    "quintal": "quintal",
 
     // News
     "Live Indian Farming News": "Live Indian Farming News",
@@ -104,7 +131,31 @@ export const translations: Record<string, Record<string, string>> = {
     "Weather Alerts": "Weather Alerts",
     "Mandi Price Updates": "Mandi Price Updates",
     "AI Health Reminders": "AI Health Reminders",
-    "Real-time insights for your fields in": "Real-time insights for your fields in"
+    "Real-time insights for your fields in": "Real-time insights for your fields in",
+    
+    // Commodities
+    "Wheat": "Wheat",
+    "Rice (Paddy)": "Rice (Paddy)",
+    "Maize": "Maize",
+    "Cotton": "Cotton",
+    "Mustard": "Mustard",
+    "Soybean": "Soybean",
+    "Onion": "Onion",
+    "Potato": "Potato",
+    "Tomato": "Tomato",
+    "Gram": "Gram",
+    "Moong": "Moong",
+    "Groundnut": "Groundnut",
+
+    // News Fallbacks
+    "PM Kisan Samman Nidhi 16th Installment Released": "PM Kisan Samman Nidhi 16th Installment Released",
+    "Millions of farmers across India receive direct financial assistance ahead of the sowing season.": "Millions of farmers across India receive direct financial assistance ahead of the sowing season.",
+    "IMD Predicts Favorable Monsoon for Kharif Crops": "IMD Predicts Favorable Monsoon for Kharif Crops",
+    "The Indian Meteorological Department forecasts above-average rainfall, boosting hopes for a record rice and soybean harvest.": "The Indian Meteorological Department forecasts above-average rainfall, boosting hopes for a record rice and soybean harvest.",
+    "Rise of Agritech Startups in Maharashtra and Gujarat": "Rise of Agritech Startups in Maharashtra and Gujarat",
+    "Local farmers are increasingly adopting drone technology and AI for precision agriculture.": "Local farmers are increasingly adopting drone technology and AI for precision agriculture.",
+    "Government Announces New MSP for Wheat and Mustard": "Government Announces New MSP for Wheat and Mustard",
+    "The minimum support price has been increased to ensure better margins for farmers this rabi season.": "The minimum support price has been increased to ensure better margins for farmers this rabi season."
   },
   
   Hindi: {
@@ -123,6 +174,7 @@ export const translations: Record<string, Record<string, string>> = {
 
     // Dashboard
     "Farm Overview": "खेत का अवलोकन",
+    "Crop Yield Trend (tons/hectare)": "फसल की उपज का रुझान (टन/हेक्टेयर)",
     "Real-time insights for your fields in Bhopal, MP.": "आपके खेतों के लिए वास्तविक समय की जानकारी।",
     "Current Weather": "वर्तमान मौसम",
     "Humidity Level": "नमी का स्तर",
@@ -172,6 +224,32 @@ export const translations: Record<string, Record<string, string>> = {
     "Min Price": "न्यूनतम मूल्य",
     "Max Price": "अधिकतम मूल्य",
     "Modal Price": "मॉडल मूल्य",
+    "Live Mandi Rates & Forecast": "लाइव मंडी भाव और पूर्वानुमान",
+    "Real-time market prices fetched directly from Agmarknet API.": "Agmarknet API से सीधे प्राप्त वास्तविक समय के बाजार मूल्य।",
+    "Fetching live agricultural market data from data.gov.in...": "data.gov.in से लाइव कृषि बाजार डेटा प्राप्त किया जा रहा है...",
+    "Back": "पीछे",
+    "Price Trend & AI Forecast": "मूल्य रुझान और एआई पूर्वानुमान",
+    "National Avg Rate": "राष्ट्रीय औसत दर",
+    "Today": "आज",
+    "30d High": "30 दिन का उच्चतम",
+    "30d Low": "30 दिन का न्यूनतम",
+    "7-Day AI Prediction": "7-दिवसीय एआई भविष्यवाणी",
+    "Expected to Rise": "बढ़ने की उम्मीद",
+    "Expected to Fall": "गिरने की उम्मीद",
+    "Recommendation": "सिफारिश",
+    "Hold / Wait": "होल्ड / प्रतीक्षा करें",
+    "Sell Now": "अभी बेचें",
+    "Historical Price": "ऐतिहासिक मूल्य",
+    "AI Forecast": "एआई पूर्वानुमान",
+    "7-Day AI Forecast": "7-दिवसीय एआई पूर्वानुमान",
+    "AI Market Insight": "एआई मार्केट अंतर्दृष्टि",
+    "Based on predictive analysis of recent volume trends and regional weather disruptions, ": "हाल के वॉल्यूम रुझानों और क्षेत्रीय मौसम संबंधी व्यवधानों के भविष्य कहनेवाला विश्लेषण के आधार पर, ",
+    " prices are projected to ": " की कीमतें ",
+    "increase": "बढ़ने",
+    "decrease": "घटने",
+    "over the coming week. Adjust your selling schedule accordingly.": " के लिए अनुमानित हैं। तदनुसार अपने बिक्री कार्यक्रम को समायोजित करें।",
+    "Min Range": "न्यूनतम सीमा",
+    "quintal": "क्विंटल",
 
     // News
     "Live Indian Farming News": "लाइव भारतीय कृषि समाचार",
@@ -212,6 +290,30 @@ export const translations: Record<string, Record<string, string>> = {
     "Weather Alerts": "मौसम अलर्ट",
     "Mandi Price Updates": "मंडी भाव अपडेट",
     "AI Health Reminders": "एआई स्वास्थ्य अनुस्मारक",
-    "Real-time insights for your fields in": "आपके खेतों के लिए वास्तविक समय की जानकारी:"
+    "Real-time insights for your fields in": "आपके खेतों के लिए वास्तविक समय की जानकारी:",
+
+    // Commodities
+    "Wheat": "गेहूं",
+    "Rice (Paddy)": "चावल (धान)",
+    "Maize": "मक्का",
+    "Cotton": "कपास",
+    "Mustard": "सरसों",
+    "Soybean": "सोयाबीन",
+    "Onion": "प्याज",
+    "Potato": "आलू",
+    "Tomato": "टमाटर",
+    "Gram": "चना",
+    "Moong": "मूंग",
+    "Groundnut": "मूंगफली",
+
+    // News Fallbacks
+    "PM Kisan Samman Nidhi 16th Installment Released": "पीएम किसान सम्मान निधि की 16वीं किस्त जारी",
+    "Millions of farmers across India receive direct financial assistance ahead of the sowing season.": "बुवाई के मौसम से पहले भारत भर के लाखों किसानों को सीधी वित्तीय सहायता मिलती है।",
+    "IMD Predicts Favorable Monsoon for Kharif Crops": "IMD ने खरीफ फसलों के लिए अनुकूल मानसून की भविष्यवाणी की",
+    "The Indian Meteorological Department forecasts above-average rainfall, boosting hopes for a record rice and soybean harvest.": "भारतीय मौसम विज्ञान विभाग ने औसत से अधिक बारिश का अनुमान लगाया है, जिससे रिकॉर्ड चावल और सोयाबीन की फसल की उम्मीदें बढ़ गई हैं।",
+    "Rise of Agritech Startups in Maharashtra and Gujarat": "महाराष्ट्र और गुजरात में एग्रीटेक स्टार्टअप्स का उदय",
+    "Local farmers are increasingly adopting drone technology and AI for precision agriculture.": "स्थानीय किसान तेजी से सटीक कृषि के लिए ड्रोन तकनीक और एआई को अपना रहे हैं।",
+    "Government Announces New MSP for Wheat and Mustard": "सरकार ने गेहूं और सरसों के लिए नए MSP की घोषणा की",
+    "The minimum support price has been increased to ensure better margins for farmers this rabi season.": "इस रबी सीजन में किसानों के लिए बेहतर मार्जिन सुनिश्चित करने के लिए न्यूनतम समर्थन मूल्य में वृद्धि की गई है।"
   }
 };

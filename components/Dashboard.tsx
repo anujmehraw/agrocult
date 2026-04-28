@@ -20,6 +20,7 @@ export default function Dashboard() {
   const [error, setError] = useState("");
   const [city, setCity] = useState("Bhopal");
   const [coords, setCoords] = useState({ lat: 23.2599, lon: 77.4126 }); // Default Bhopal
+  const [weatherAlert, setWeatherAlert] = useState<{type: string, msg: string} | null>(null);
 
   // 🌤 FETCH WEATHER
   useEffect(() => {
@@ -52,10 +53,24 @@ export default function Dashboard() {
           };
         });
 
+        // Check for extreme conditions in next 24 hours (8 periods of 3h)
+        let alertObj = null;
+        for (let item of weatherJson.list.slice(0, 8)) {
+          if (item.main.temp > 35) {
+            alertObj = { type: "heat", msg: t("EXTREME HEAT WARNING: Temperatures expected to exceed 35°C today. Delay spraying chemicals and ensure adequate soil moisture.") };
+            break;
+          }
+          if (item.rain && item.rain["3h"] > 10) {
+            alertObj = { type: "rain", msg: t("HEAVY RAIN ALERT: Heavy rainfall expected. Postpone pesticide application and ensure field drainage.") };
+            break;
+          }
+        }
+        setWeatherAlert(alertObj);
+
         setData(chartData);
         setCurrent(weatherJson.list[0]);
       } catch {
-        setError("Failed to load weather data");
+        setError(t("Failed to load weather data"));
       }
     };
 
@@ -84,6 +99,13 @@ export default function Dashboard() {
           <p className="text-gray-600 mt-1">{t("Real-time insights for your fields in")} {city}.</p>
         </div>
       </div>
+
+      {weatherAlert && (
+        <div className={`p-4 rounded-xl border flex items-start gap-3 shadow-sm animate-fade-in ${weatherAlert.type === 'heat' ? 'bg-orange-50 border-orange-200 text-orange-900' : 'bg-blue-50 border-blue-200 text-blue-900'}`}>
+          <svg className="w-6 h-6 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
+          <p className="text-sm font-bold">{weatherAlert.msg}</p>
+        </div>
+      )}
 
       {error && <div className="p-4 bg-red-50 text-red-700 rounded-xl border border-red-200">{error}</div>}
 
@@ -143,7 +165,7 @@ export default function Dashboard() {
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         
         {/* 📈 CHART */}
-        <div className="lg:col-span-2 glass p-6 rounded-2xl shadow-sm border border-white">
+        <div className="lg:col-span-2 card p-6 shadow-sm">
           <div className="flex justify-between items-center mb-6">
             <h3 className="text-lg font-bold text-gray-800">{t("Temperature Forecast (Today)")}</h3>
           </div>
@@ -176,7 +198,7 @@ export default function Dashboard() {
         </div>
 
         {/* 🛰 SATELLITE */}
-        <div className="glass p-6 rounded-2xl shadow-sm border border-white flex flex-col">
+        <div className="card p-6 shadow-sm flex flex-col">
           <h3 className="text-lg font-bold text-gray-800 mb-4">{t("Farm Satellite View")}</h3>
           <div className="flex-1 min-h-[250px] rounded-xl overflow-hidden border border-gray-200 shadow-inner">
             <iframe
